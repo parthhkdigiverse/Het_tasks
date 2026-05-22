@@ -63,10 +63,10 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-primary" /> Create new task
           </DialogTitle>
-          <DialogDescription>Step {step + 1} of 3 — Set up the perfect task in seconds.</DialogDescription>
+          <DialogDescription>Step {step + 1} of 2 — Set up the perfect task in seconds.</DialogDescription>
         </DialogHeader>
         <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
-          <motion.div className="h-full bg-primary" animate={{ width: `${((step + 1) / 3) * 100}%` }} />
+          <motion.div className="h-full bg-primary" animate={{ width: `${((step + 1) / 2) * 100}%` }} />
         </div>
 
         {step === 0 && (
@@ -153,25 +153,11 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
           </motion.div>
         )}
 
-        {step === 2 && (
-          <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-            <div className="space-y-2"><Label>Notes</Label><Textarea rows={4} placeholder="Optional notes…" /></div>
-            <div className="space-y-2">
-              <Label>Attachments</Label>
-              <div className="border-2 border-dashed rounded-xl p-8 text-center hover:bg-accent/50 transition cursor-pointer">
-                <Paperclip className="h-6 w-6 mx-auto text-muted-foreground" />
-                <p className="mt-2 text-sm">Drag files here or <span className="text-primary font-medium">browse</span></p>
-                <p className="text-xs text-muted-foreground mt-1">Max 25MB per file</p>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
         <DialogFooter className="gap-2 sm:gap-2">
           {step > 0 && <Button variant="ghost" onClick={() => setStep(step - 1)}>Back</Button>}
           <div className="flex-1" />
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          {step < 2 ? (
+          {step < 1 ? (
             <Button onClick={() => setStep(step + 1)}>Continue</Button>
           ) : (
             <Button onClick={submit}>Create task</Button>

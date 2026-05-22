@@ -12,6 +12,7 @@ import { CreateTaskDialog } from "@/components/tasks/CreateTaskDialog";
 import { CommandPalette } from "@/components/layout/CommandPalette";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function Topbar({ onMenu }: { onMenu: () => void }) {
   const { theme, toggle } = useTheme();
@@ -54,27 +55,21 @@ export function Topbar({ onMenu }: { onMenu: () => void }) {
           </Button>
 
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="ml-1 flex items-center gap-2 rounded-full pr-2 hover:bg-accent transition">
-                <Avatar className="h-8 w-8 ring-2 ring-background">
-                  <AvatarImage src={me.avatar} />
-                  <AvatarFallback>{initials(me.name)}</AvatarFallback>
-                </Avatar>
-                <span className="hidden md:inline text-sm font-medium">{me.name.split(" ")[0]}</span>
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>{me.name}</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                logout();
-                window.location.href = '/login';
-              }}>Sign out</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <TooltipProvider delayDuration={200}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="ml-1 flex items-center gap-2 rounded-full cursor-default">
+                  <Avatar className="h-8 w-8 ring-2 ring-background">
+                    <AvatarImage src={me.avatar} />
+                    <AvatarFallback>{initials(me.name)}</AvatarFallback>
+                  </Avatar>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" align="end">
+                {me.name}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
       <CreateTaskDialog open={open} onOpenChange={setOpen} />
