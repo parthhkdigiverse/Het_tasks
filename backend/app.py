@@ -151,6 +151,40 @@ def create_task():
     db.tasks.insert_one(new_task.copy())
     return jsonify({"status": "success", "task": new_task}), 201
 
+@app.route('/api/tasks/<task_id>', methods=['DELETE'])
+def delete_task(task_id):
+    result = db.tasks.delete_one({"id": task_id})
+    if result.deleted_count > 0:
+        return jsonify({"status": "success", "message": "Task deleted"}), 200
+    else:
+        return jsonify({"status": "error", "message": "Task not found"}), 404
+
+@app.route('/api/tasks/<task_id>', methods=['PUT'])
+def update_task(task_id):
+    data = request.json
+    update_fields = {}
+    
+    if 'title' in data: update_fields['title'] = data['title']
+    if 'description' in data: update_fields['description'] = data['description']
+    if 'status' in data: update_fields['status'] = data['status']
+    if 'priority' in data: update_fields['priority'] = data['priority']
+    
+    if 'assigneeId' in data:
+        if data['assigneeId']:
+            assignee = db.users.find_one({"id": data['assigneeId']}, {'_id': False})
+            if assignee: update_fields['assignee'] = assignee
+        else:
+            update_fields['assignee'] = {"name": "Unassigned", "avatar": ""}
+            
+    if not update_fields:
+        return jsonify({"status": "error", "message": "No fields to update"}), 400
+        
+    result = db.tasks.update_one({"id": task_id}, {"$set": update_fields})
+    if result.matched_count > 0:
+        return jsonify({"status": "success", "message": "Task updated"}), 200
+    else:
+        return jsonify({"status": "error", "message": "Task not found"}), 404
+
 @app.route('/api/activities', methods=['GET'])
 def get_activities():
     activities = list(db.activities.find({}, {'_id': False, 'user._id': False}))

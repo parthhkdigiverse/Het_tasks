@@ -12,6 +12,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { deleteTask } from "@/lib/api";
+import { EditTaskDialog } from "./EditTaskDialog";
 
 const priorityStyles: Record<string, string> = {
   low: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
@@ -21,7 +25,21 @@ const priorityStyles: Record<string, string> = {
 };
 
 export function TaskCard({ task, draggable = true }: { task: Task; draggable?: boolean }) {
+  const [editOpen, setEditOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const handleDelete = async () => {
+    try {
+      await deleteTask(task.id);
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      toast.success("Task deleted");
+    } catch (e) {
+      toast.error("Failed to delete task");
+    }
+  };
+
   return (
+    <>
     <TooltipProvider delayDuration={200}>
       <motion.div
         layout
@@ -41,7 +59,18 @@ export function TaskCard({ task, draggable = true }: { task: Task; draggable?: b
               </Badge>
             )}
           </div>
-
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="h-6 w-6 grid place-items-center text-muted-foreground hover:text-foreground hover:bg-accent rounded transition shrink-0">
+                <MoreHorizontal className="h-4 w-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setEditOpen(true)}>Edit</DropdownMenuItem>
+              <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={handleDelete}>Delete</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <h4 className="mt-2 text-sm font-semibold leading-snug">{task.title}</h4>
         <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{task.description}</p>
@@ -78,5 +107,7 @@ export function TaskCard({ task, draggable = true }: { task: Task; draggable?: b
         </div>
       </motion.div>
     </TooltipProvider>
+    <EditTaskDialog task={task} open={editOpen} onOpenChange={setEditOpen} />
+    </>
   );
 }

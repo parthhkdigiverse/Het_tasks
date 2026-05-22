@@ -75,6 +75,22 @@ export const createTask = async (data: any) => {
   return res.json();
 };
 
+export const deleteTask = async (taskId: string) => {
+  const res = await fetch(`${API_BASE}/tasks/${taskId}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error('Failed to delete task');
+  return res.json();
+};
+
+export const updateTask = async (taskId: string, data: any) => {
+  const res = await fetch(`${API_BASE}/tasks/${taskId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error('Failed to update task');
+  return res.json();
+};
+
 export const useUsers = () => {
   return useQuery({
     queryKey: ['users'],
