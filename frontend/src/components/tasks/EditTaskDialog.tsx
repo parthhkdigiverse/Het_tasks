@@ -71,7 +71,7 @@ export function EditTaskDialog({ task, open, onOpenChange }: { task: Task | null
             <Label>Description</Label>
             <Textarea rows={4} placeholder="Description..." value={form.description} onChange={e => setForm({...form, description: e.target.value})} />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3">
             <div className="space-y-2">
               <Label>Priority</Label>
               <Select value={form.priority} onValueChange={v => setForm({...form, priority: v})}>
@@ -81,16 +81,6 @@ export function EditTaskDialog({ task, open, onOpenChange }: { task: Task | null
                   <SelectItem value="medium">Medium</SelectItem>
                   <SelectItem value="high">High</SelectItem>
                   <SelectItem value="urgent">Urgent</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>Assigned To</Label>
-              <Select value={form.assigneeId} onValueChange={v => setForm({...form, assigneeId: v})}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="unassigned">Unassigned</SelectItem>
-                  {users.map((u: any) => <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>

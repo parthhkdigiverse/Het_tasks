@@ -22,7 +22,7 @@ export const Route = createFileRoute("/tasks")({ component: TasksPage });
 const quickFilters = ["All", "Today", "Upcoming", "Due", "Completed"];
 
 function TasksPage() {
-  const { data: allTasks = [], isLoading: tasksLoading } = useTasks();
+  const { data: allTasks = [], isLoading: tasksLoading } = useTasks(me?.id);
   const { data: users = [], isLoading: usersLoading } = useUsers();
   const { user: me } = useAuth();
   
@@ -30,7 +30,6 @@ function TasksPage() {
   const [quick, setQuick] = useState("All");
   const [priority, setPriority] = useState<string>("all");
   const [type, setType] = useState<string>("all");
-  const [user, setUser] = useState<string>("all");
   const [open, setOpen] = useState(false);
 
   const filtered = useMemo(() => {
@@ -38,9 +37,6 @@ function TasksPage() {
       if (q && !t.title.toLowerCase().includes(q.toLowerCase())) return false;
       if (priority !== "all" && t.priority !== priority) return false;
       if (type !== "all" && t.recurrence !== type) return false;
-      if (user === "unassigned" && t.assignee?.id) return false;
-      if (user === "me" && t.assignee?.id !== me?.id) return false;
-      if (user !== "all" && user !== "unassigned" && user !== "me" && t.assignee?.id !== user) return false;
       
       const tDate = t.dueDate === "Tomorrow" ? new Date(Date.now() + 86400000) : new Date(t.dueDate);
       
@@ -50,7 +46,7 @@ function TasksPage() {
       if (quick === "Completed" && t.status !== "completed") return false;
       return true;
     });
-  }, [allTasks, q, priority, type, user, quick, me]);
+  }, [allTasks, q, priority, type, quick]);
 
   if (tasksLoading || usersLoading) return <div className="p-8 text-center">Loading tasks...</div>;
 
@@ -85,14 +81,6 @@ function TasksPage() {
                 {(["one-time","daily","weekly","monthly","custom"] as Recurrence[]).map((r) => <SelectItem key={r} value={r} className="capitalize">{r}</SelectItem>)}
               </SelectContent>
             </Select>
-            <Select value={user} onValueChange={setUser}>
-              <SelectTrigger className="w-[150px]"><SelectValue placeholder="Assignee" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All users</SelectItem>
-                <SelectItem value="me">Assigned to me</SelectItem>
-                <SelectItem value="unassigned">Unassigned</SelectItem>
-                {users.map((u: any) => <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>)}
-              </SelectContent>
             </Select>
           </div>
         </div>

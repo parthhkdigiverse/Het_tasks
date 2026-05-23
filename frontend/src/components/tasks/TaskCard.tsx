@@ -82,28 +82,7 @@ export function TaskCard({ task, draggable = true }: { task: Task; draggable?: b
             <Calendar className="h-3.5 w-3.5" />{task.dueDate && task.dueDate !== "Tomorrow" ? format(new Date(task.dueDate), "MMM d") : "Tomorrow"}
             {task.reminder && <Bell className="h-3.5 w-3.5 text-primary" />}
           </div>
-          <div className="flex items-center -space-x-1.5">
-            {task.assignedBy && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Avatar className="h-6 w-6 ring-2 ring-card relative z-10">
-                    <AvatarImage src={task.assignedBy.avatar || ""} />
-                    <AvatarFallback className="text-[10px]">{initials(task.assignedBy.name || "S")}</AvatarFallback>
-                  </Avatar>
-                </TooltipTrigger>
-                <TooltipContent>Assigned by: {task.assignedBy.name}</TooltipContent>
-              </Tooltip>
-            )}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Avatar className={cn("h-6 w-6 ring-2 ring-card relative", task.assignedBy ? "z-20" : "z-10")}>
-                  <AvatarImage src={task.assignee?.avatar || ""} />
-                  <AvatarFallback className="text-[10px]">{initials(task.assignee?.name || "U")}</AvatarFallback>
-                </Avatar>
-              </TooltipTrigger>
-              <TooltipContent>Assigned to: {task.assignee?.name || "Unassigned"}</TooltipContent>
-            </Tooltip>
-          </div>
+
         </div>
       </motion.div>
     </TooltipProvider>

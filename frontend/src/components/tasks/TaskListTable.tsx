@@ -40,22 +40,7 @@ function TaskRow({ t }: { t: Task }) {
           <p className="font-medium text-sm">{t.title}</p>
           <p className="text-xs text-muted-foreground line-clamp-1">{t.description}</p>
         </TableCell>
-        <TableCell>
-          <div className="flex flex-col gap-1.5 py-1">
-            <div className="flex items-center gap-1.5">
-              <span className="text-[10px] uppercase font-medium text-muted-foreground w-6">To:</span>
-              <Avatar className="h-5 w-5"><AvatarImage src={t.assignee?.avatar || ""} /><AvatarFallback className="text-[8px]">{initials(t.assignee?.name || "U")}</AvatarFallback></Avatar>
-              <span className="text-sm hidden md:inline">{t.assignee?.name || "Unassigned"}</span>
-            </div>
-            {t.assignedBy && (
-              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] uppercase font-medium text-muted-foreground w-6">By:</span>
-                <Avatar className="h-5 w-5"><AvatarImage src={t.assignedBy.avatar || ""} /><AvatarFallback className="text-[8px]">{initials(t.assignedBy.name || "S")}</AvatarFallback></Avatar>
-                <span className="text-xs text-muted-foreground hidden md:inline">{t.assignedBy.name}</span>
-              </div>
-            )}
-          </div>
-        </TableCell>
+
         <TableCell><Badge variant="outline" className={cn("capitalize", priorityStyles[t.priority])}>{t.priority}</Badge></TableCell>
         <TableCell><Badge variant="outline" className={cn("capitalize border-0", statusStyles[t.status])}>{t.status}</Badge></TableCell>
         <TableCell className="text-sm text-muted-foreground">{t.dueDate && t.dueDate !== "Tomorrow" ? format(new Date(t.dueDate), "MMM d") : "Tomorrow"}</TableCell>
@@ -94,7 +79,7 @@ export function TaskListTable({ tasks }: { tasks: Task[] }) {
           <TableHeader>
             <TableRow className="bg-muted/30 hover:bg-muted/30">
               <TableHead>Task</TableHead>
-              <TableHead>Assignee</TableHead>
+
               <TableHead>Priority</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Due</TableHead>

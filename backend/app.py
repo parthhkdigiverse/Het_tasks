@@ -104,7 +104,11 @@ def login():
 
 @app.route('/api/tasks', methods=['GET'])
 def get_tasks():
-    tasks = list(db.tasks.find({}, {'_id': False, 'assignee._id': False, 'assignedBy._id': False}))
+    user_id = request.args.get('userId')
+    query = {}
+    if user_id:
+        query['assignedBy.id'] = user_id
+    tasks = list(db.tasks.find(query, {'_id': False, 'assignee._id': False, 'assignedBy._id': False}))
     return jsonify(tasks)
 
 @app.route('/api/tasks', methods=['POST'])

@@ -8,8 +8,9 @@ export const fetchUsers = async () => {
   return res.json();
 };
 
-export const fetchTasks = async () => {
-  const res = await fetch(`${API_BASE}/tasks`);
+export const fetchTasks = async (userId?: string) => {
+  const url = userId ? `${API_BASE}/tasks?userId=${userId}` : `${API_BASE}/tasks`;
+  const res = await fetch(url);
   if (!res.ok) throw new Error('Failed to fetch tasks');
   return res.json();
 };
@@ -98,10 +99,10 @@ export const useUsers = () => {
   });
 };
 
-export const useTasks = () => {
+export const useTasks = (userId?: string) => {
   return useQuery({
-    queryKey: ['tasks'],
-    queryFn: fetchTasks,
+    queryKey: ['tasks', userId],
+    queryFn: () => fetchTasks(userId),
   });
 };
 

@@ -74,7 +74,7 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
           <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
             <div className="space-y-2"><Label>Title</Label><Input placeholder="Write a clear, actionable title…" value={form.title} onChange={e => setForm({...form, title: e.target.value})} autoFocus /></div>
             <div className="space-y-2"><Label>Description</Label><Textarea rows={4} placeholder="Add context, links, acceptance criteria…" value={form.description} onChange={e => setForm({...form, description: e.target.value})} /></div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3">
               <div className="space-y-2">
                 <Label>Priority</Label>
                 <Select value={form.priority} onValueChange={v => setForm({...form, priority: v})}>
@@ -84,17 +84,6 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
                     <SelectItem value="medium">Medium</SelectItem>
                     <SelectItem value="high">High</SelectItem>
                     <SelectItem value="urgent">Urgent</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Assigned To</Label>
-                <Select value={form.assigneeId} onValueChange={v => setForm({...form, assigneeId: v})}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="me">Assign to me</SelectItem>
-                    <SelectItem value="unassigned">Unassigned</SelectItem>
-                    {users.map((u: any) => <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
