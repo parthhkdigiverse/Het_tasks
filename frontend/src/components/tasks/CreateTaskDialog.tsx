@@ -26,6 +26,7 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
     priority: "medium",
     assigneeId: "unassigned",
     recurrence: "one-time",
+    recurrenceDays: [] as string[],
     carryOver: false
   });
   
@@ -43,7 +44,7 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       onOpenChange(false);
       setStep(0);
-      setForm({ title: "", description: "", priority: "medium", assigneeId: "unassigned", recurrence: "one-time", carryOver: false });
+      setForm({ title: "", description: "", priority: "medium", assigneeId: "unassigned", recurrence: "one-time", recurrenceDays: [], carryOver: false });
       toast.success("Task created", { description: "Your task was added to the board." });
     } catch (e) {
       toast.error("Failed to create task");
@@ -55,7 +56,7 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
       onOpenChange(v); 
       if (!v) {
         setStep(0);
-        setForm({ title: "", description: "", priority: "medium", assigneeId: "unassigned", recurrence: "one-time", carryOver: false });
+        setForm({ title: "", description: "", priority: "medium", assigneeId: "unassigned", recurrence: "one-time", recurrenceDays: [], carryOver: false });
       }
     }}>
       <DialogContent className="sm:max-w-[560px]">
@@ -124,9 +125,24 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
                 </TabsList>
                 <TabsContent value="weekly" className="pt-3">
                   <div className="flex flex-wrap gap-1.5">
-                    {["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((d) => (
-                      <button key={d} className="px-3 py-1.5 rounded-md border text-xs hover:bg-accent">{d}</button>
-                    ))}
+                    {["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((d) => {
+                      const isSelected = form.recurrenceDays.includes(d);
+                      return (
+                        <button 
+                          key={d} 
+                          onClick={() => {
+                            if (isSelected) {
+                              setForm({...form, recurrenceDays: form.recurrenceDays.filter(day => day !== d)});
+                            } else {
+                              setForm({...form, recurrenceDays: [...form.recurrenceDays, d]});
+                            }
+                          }}
+                          className={`px-3 py-1.5 rounded-md border text-xs transition ${isSelected ? 'bg-primary text-primary-foreground border-primary' : 'hover:bg-accent'}`}
+                        >
+                          {d}
+                        </button>
+                      );
+                    })}
                   </div>
                 </TabsContent>
                 <TabsContent value="custom" className="pt-3">

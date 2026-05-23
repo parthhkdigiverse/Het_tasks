@@ -141,6 +141,7 @@ def create_task():
         "createdAt": datetime.datetime.now().isoformat() + "Z",
         "dueDate": data.get('dueDate', (datetime.datetime.now() + datetime.timedelta(days=1)).isoformat() + "Z"),
         "recurrence": data.get('recurrence', "one-time"),
+        "recurrenceDays": data.get('recurrenceDays', []),
         "carryOver": data.get('carryOver', False),
         "reminder": data.get('reminder', False),
         "comments": 0,
