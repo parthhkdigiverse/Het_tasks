@@ -129,6 +129,7 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
                       const isSelected = form.recurrenceDays.includes(d);
                       return (
                         <button 
+                          type="button"
                           key={d} 
                           onClick={() => {
                             if (isSelected) {
@@ -137,7 +138,11 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
                               setForm({...form, recurrenceDays: [...form.recurrenceDays, d]});
                             }
                           }}
-                          className={`px-3 py-1.5 rounded-md border text-xs transition ${isSelected ? 'bg-primary text-primary-foreground border-primary' : 'hover:bg-accent'}`}
+                          className={`px-3 py-1.5 rounded-md border text-xs transition-all font-medium ${
+                            isSelected 
+                              ? 'bg-primary text-primary-foreground border-primary shadow-sm' 
+                              : 'bg-background text-foreground hover:bg-accent hover:text-accent-foreground'
+                          }`}
                         >
                           {d}
                         </button>
