@@ -81,7 +81,6 @@ function TasksPage() {
                 {(["one-time","daily","weekly","monthly","custom"] as Recurrence[]).map((r) => <SelectItem key={r} value={r} className="capitalize">{r}</SelectItem>)}
               </SelectContent>
             </Select>
-            </Select>
           </div>
         </div>
         <div className="flex flex-wrap gap-1.5">
