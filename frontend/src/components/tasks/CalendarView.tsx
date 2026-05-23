@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+import { isTaskActiveOnDate } from "@/lib/utils";
+
 export function CalendarView({ tasks }: { tasks: Task[] }) {
   const [cursor, setCursor] = useState(new Date());
   const days = useMemo(() => {
@@ -28,10 +30,7 @@ export function CalendarView({ tasks }: { tasks: Task[] }) {
       </div>
       <div className="grid grid-cols-7 gap-1">
         {days.map((d) => {
-          const dayTasks = tasks.filter((t) => {
-            const tDate = t.dueDate === "Tomorrow" ? new Date(Date.now() + 86400000) : new Date(t.dueDate);
-            return isSameDay(tDate, d);
-          });
+          const dayTasks = tasks.filter((t) => isTaskActiveOnDate(t, d));
           const muted = !isSameMonth(d, cursor);
           const today = isSameDay(d, new Date());
           return (

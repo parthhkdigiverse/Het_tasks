@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { isToday } from "date-fns";
+import { isTaskActiveOnDate } from "@/lib/utils";
 
 export const Route = createFileRoute("/tasks")({ component: TasksPage });
 
@@ -40,7 +41,7 @@ function TasksPage() {
       
       const tDate = t.dueDate === "Tomorrow" ? new Date(Date.now() + 86400000) : new Date(t.dueDate);
       
-      if (quick === "Today" && !isToday(tDate)) return false;
+      if (quick === "Today" && !isTaskActiveOnDate(t, new Date())) return false;
       if (quick === "Upcoming" && tDate <= new Date()) return false;
       if (quick === "Due" && (tDate > new Date() || t.status === "completed")) return false;
       if (quick === "Completed" && t.status !== "completed") return false;

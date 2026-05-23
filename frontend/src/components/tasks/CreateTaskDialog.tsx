@@ -25,6 +25,7 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
     description: "",
     priority: "medium",
     assigneeId: "unassigned",
+    dueDate: new Date().toISOString().split('T')[0],
     recurrence: "one-time",
     recurrenceDays: [] as string[],
     carryOver: false
@@ -44,7 +45,7 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       onOpenChange(false);
       setStep(0);
-      setForm({ title: "", description: "", priority: "medium", assigneeId: "unassigned", recurrence: "one-time", recurrenceDays: [], carryOver: false });
+      setForm({ title: "", description: "", priority: "medium", assigneeId: "unassigned", dueDate: new Date().toISOString().split('T')[0], recurrence: "one-time", recurrenceDays: [], carryOver: false });
       toast.success("Task created", { description: "Your task was added to the board." });
     } catch (e) {
       toast.error("Failed to create task");
@@ -56,7 +57,7 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
       onOpenChange(v); 
       if (!v) {
         setStep(0);
-        setForm({ title: "", description: "", priority: "medium", assigneeId: "unassigned", recurrence: "one-time", recurrenceDays: [], carryOver: false });
+        setForm({ title: "", description: "", priority: "medium", assigneeId: "unassigned", dueDate: new Date().toISOString().split('T')[0], recurrence: "one-time", recurrenceDays: [], carryOver: false });
       }
     }}>
       <DialogContent className="sm:max-w-[560px]">
@@ -97,7 +98,7 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
               <div className="space-y-2"><Label>Due date</Label>
                 <div className="relative">
                   <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input type="date" className="pl-9" />
+                  <Input type="date" className="pl-9" value={form.dueDate} onChange={e => setForm({...form, dueDate: e.target.value})} />
                 </div>
               </div>
               <div className="space-y-2"><Label>Time</Label><Input type="time" defaultValue="09:00" /></div>
