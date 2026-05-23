@@ -22,9 +22,9 @@ export const Route = createFileRoute("/tasks")({ component: TasksPage });
 const quickFilters = ["All", "Today", "Upcoming", "Due", "Completed"];
 
 function TasksPage() {
+  const { user: me } = useAuth();
   const { data: allTasks = [], isLoading: tasksLoading } = useTasks(me?.id);
   const { data: users = [], isLoading: usersLoading } = useUsers();
-  const { user: me } = useAuth();
   
   const [q, setQ] = useState("");
   const [quick, setQuick] = useState("All");

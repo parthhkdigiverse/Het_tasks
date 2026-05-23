@@ -12,11 +12,13 @@ import { TaskCard } from "@/components/tasks/TaskCard";
 import { Link } from "@tanstack/react-router";
 
 import { useTasks, useActivities, useUsers, useDashboardMetrics } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/")({ component: Dashboard });
 
 function Dashboard() {
-  const { data: tasks = [], isLoading: tasksLoading } = useTasks();
+  const { user: me } = useAuth();
+  const { data: tasks = [], isLoading: tasksLoading } = useTasks(me?.id);
   const { data: activities = [], isLoading: activitiesLoading } = useActivities();
   const { data: users = [], isLoading: usersLoading } = useUsers();
   const { data: metrics, isLoading: metricsLoading } = useDashboardMetrics();
