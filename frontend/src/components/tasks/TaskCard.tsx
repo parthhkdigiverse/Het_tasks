@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { Bell, Calendar, MoreHorizontal, Repeat, CheckCircle2 } from "lucide-react";
 import { initials } from "@/lib/mock-data";
-import { cn } from "@/lib/utils";
+import { cn, getLocalMidnightDate } from "@/lib/utils";
 import { format } from "date-fns";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
@@ -79,7 +79,7 @@ export function TaskCard({ task, draggable = true }: { task: Task; draggable?: b
 
         <div className="mt-3 flex items-center justify-between">
           <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-            <Calendar className="h-3.5 w-3.5" />{task.dueDate && task.dueDate !== "Tomorrow" ? format(new Date(task.dueDate), "MMM d") : "Tomorrow"}
+            <Calendar className="h-3.5 w-3.5" />{task.dueDate && task.dueDate !== "Tomorrow" ? format(getLocalMidnightDate(task.dueDate), "MMM d") : "Tomorrow"}
             {task.reminder && <Bell className="h-3.5 w-3.5 text-primary" />}
           </div>
 

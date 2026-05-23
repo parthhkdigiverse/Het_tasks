@@ -11,7 +11,7 @@ import { format, isToday } from "date-fns";
 import { TaskCard } from "@/components/tasks/TaskCard";
 import { Link } from "@tanstack/react-router";
 
-import { isTaskActiveOnDate } from "@/lib/utils";
+import { isTaskActiveOnDate, getLocalMidnightDate } from "@/lib/utils";
 import { useTasks, useActivities, useUsers, useDashboardMetrics } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 
@@ -33,8 +33,8 @@ function Dashboard() {
   const { productivityTrend = [], weeklyCompletion = [], taskDistribution = [], kpis = {} } = metrics || {};
 
   const todays = tasks.filter((t: any) => isTaskActiveOnDate(t, new Date())).slice(0, 4);
-  const due = tasks.filter((t: any) => new Date(t.dueDate) < new Date() && t.status !== "completed").slice(0, 4);
-  const upcoming = tasks.filter((t: any) => new Date(t.dueDate) > new Date()).slice(0, 4);
+  const due = tasks.filter((t: any) => getLocalMidnightDate(t.dueDate) < new Date() && t.status !== "completed").slice(0, 4);
+  const upcoming = tasks.filter((t: any) => getLocalMidnightDate(t.dueDate) > new Date()).slice(0, 4);
 
   return (
     <div className="space-y-6">

@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, getLocalMidnightDate } from "@/lib/utils";
 import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -43,7 +43,7 @@ function TaskRow({ t }: { t: Task }) {
 
         <TableCell><Badge variant="outline" className={cn("capitalize", priorityStyles[t.priority])}>{t.priority}</Badge></TableCell>
         <TableCell><Badge variant="outline" className={cn("capitalize border-0", statusStyles[t.status])}>{t.status}</Badge></TableCell>
-        <TableCell className="text-sm text-muted-foreground">{t.dueDate && t.dueDate !== "Tomorrow" ? format(new Date(t.dueDate), "MMM d") : "Tomorrow"}</TableCell>
+        <TableCell className="text-sm text-muted-foreground">{t.dueDate && t.dueDate !== "Tomorrow" ? format(getLocalMidnightDate(t.dueDate), "MMM d") : "Tomorrow"}</TableCell>
         <TableCell><Badge variant="secondary" className="capitalize">{t.recurrence || "one-time"}</Badge></TableCell>
         <TableCell>
           <DropdownMenu>

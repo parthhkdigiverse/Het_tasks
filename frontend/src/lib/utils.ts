@@ -2,13 +2,23 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { isSameDay, startOfDay, format } from "date-fns";
 
+export function getLocalMidnightDate(dateStr: string): Date {
+  if (!dateStr) return new Date();
+  if (dateStr === "Tomorrow") return new Date(Date.now() + 86400000);
+  if (!dateStr.includes('T')) {
+    const parts = dateStr.split('-');
+    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+  }
+  return new Date(dateStr);
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export function isTaskActiveOnDate(task: any, date: Date) {
   if (!task.dueDate) return false;
-  const tDate = task.dueDate === "Tomorrow" ? new Date(Date.now() + 86400000) : new Date(task.dueDate);
+  const tDate = getLocalMidnightDate(task.dueDate);
   const isPastStart = date >= startOfDay(tDate);
   
   if (task.recurrence === "daily") {

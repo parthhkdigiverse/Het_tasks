@@ -11,6 +11,7 @@ import { useUsers, createTask } from "@/lib/api";
 import { getNextOccurrence } from "@/lib/utils";
 import { toast } from "sonner";
 import { Calendar as CalendarIcon, Paperclip, Sparkles } from "lucide-react";
+import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { useAuth } from "@/lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
@@ -26,7 +27,7 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
     description: "",
     priority: "medium",
     assigneeId: "unassigned",
-    dueDate: new Date().toISOString().split('T')[0],
+    dueDate: format(new Date(), 'yyyy-MM-dd'),
     recurrence: "one-time",
     recurrenceDays: [] as string[],
     carryOver: false
@@ -51,7 +52,7 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       onOpenChange(false);
       setStep(0);
-      setForm({ title: "", description: "", priority: "medium", assigneeId: "unassigned", dueDate: new Date().toISOString().split('T')[0], recurrence: "one-time", recurrenceDays: [], carryOver: false });
+      setForm({ title: "", description: "", priority: "medium", assigneeId: "unassigned", dueDate: format(new Date(), 'yyyy-MM-dd'), recurrence: "one-time", recurrenceDays: [], carryOver: false });
       toast.success("Task created", { description: "Your task was added to the board." });
     } catch (e) {
       toast.error("Failed to create task");
@@ -63,7 +64,7 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
       onOpenChange(v); 
       if (!v) {
         setStep(0);
-        setForm({ title: "", description: "", priority: "medium", assigneeId: "unassigned", dueDate: new Date().toISOString().split('T')[0], recurrence: "one-time", recurrenceDays: [], carryOver: false });
+        setForm({ title: "", description: "", priority: "medium", assigneeId: "unassigned", dueDate: format(new Date(), 'yyyy-MM-dd'), recurrence: "one-time", recurrenceDays: [], carryOver: false });
       }
     }}>
       <DialogContent className="sm:max-w-[560px]">
