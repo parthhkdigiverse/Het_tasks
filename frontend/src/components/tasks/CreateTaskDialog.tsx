@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useState } from "react";
 import { useUsers, createTask } from "@/lib/api";
+import { getNextOccurrence } from "@/lib/utils";
 import { toast } from "sonner";
 import { Calendar as CalendarIcon, Paperclip, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
@@ -41,7 +42,12 @@ export function CreateTaskDialog({ open, onOpenChange }: { open: boolean; onOpen
       if (finalAssigneeId === "unassigned") finalAssigneeId = "";
       if (finalAssigneeId === "me") finalAssigneeId = me?.id || "";
 
-      await createTask({ ...form, assigneeId: finalAssigneeId, assignedById: me?.id || "" });
+      let finalDueDate = form.dueDate;
+      if (form.recurrence === "weekly") {
+        finalDueDate = getNextOccurrence(form.dueDate, form.recurrenceDays);
+      }
+
+      await createTask({ ...form, dueDate: finalDueDate, assigneeId: finalAssigneeId, assignedById: me?.id || "" });
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       onOpenChange(false);
       setStep(0);
