@@ -7,11 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
+import { updateUser } from "@/lib/api";
 
 export const Route = createFileRoute("/profile")({ component: ProfilePage });
 
 function ProfilePage() {
-  const { user: me } = useAuth();
+  const { user: me, login } = useAuth();
+  const [name, setName] = useState(me?.name || "");
+  const [email, setEmail] = useState(me?.email || "");
+  const [isSaving, setIsSaving] = useState(false);
 
   if (!me) return <div className="p-8 text-center text-muted-foreground">Loading profile...</div>;
   return (
@@ -35,7 +40,23 @@ function ProfilePage() {
               <span><b className="text-foreground">98%</b> on-time</span>
             </div>
           </div>
-          <Button onClick={() => toast.success("Saved")}>Save changes</Button>
+          <Button 
+            disabled={isSaving}
+            onClick={async () => {
+              setIsSaving(true);
+              try {
+                await updateUser(me.id, { name, email });
+                login({ ...me, name, email });
+                toast.success("Profile saved successfully");
+              } catch (e) {
+                toast.error("Failed to save profile");
+              } finally {
+                setIsSaving(false);
+              }
+            }}
+          >
+            {isSaving ? "Saving..." : "Save changes"}
+          </Button>
         </div>
       </div>
 
@@ -47,8 +68,8 @@ function ProfilePage() {
 
         <TabsContent value="account" className="mt-4">
           <div className="rounded-2xl border bg-card p-5 grid gap-4 md:grid-cols-2">
-            <div className="space-y-2"><Label>Full name</Label><Input defaultValue={me.name} /></div>
-            <div className="space-y-2"><Label>Email</Label><Input defaultValue={me.email} /></div>
+            <div className="space-y-2"><Label>Full name</Label><Input value={name} onChange={e => setName(e.target.value)} /></div>
+            <div className="space-y-2"><Label>Email</Label><Input value={email} onChange={e => setEmail(e.target.value)} /></div>
 
             <div className="md:col-span-2 space-y-2"><Label>Bio</Label><Input defaultValue="Product manager focused on craft and velocity." /></div>
           </div>
