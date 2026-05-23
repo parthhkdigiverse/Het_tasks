@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-const API_BASE = 'http://localhost:1122/api';
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:1122/api';
 
 export const fetchUsers = async () => {
   const res = await fetch(`${API_BASE}/users`);

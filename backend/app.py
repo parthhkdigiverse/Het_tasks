@@ -1,15 +1,15 @@
 import os
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
-# Load environment variables from the root .env file
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
+# Load environment variables from the root .env file (works locally; on Vercel, env vars are set in dashboard)
+env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+if os.path.exists(env_path):
+    load_dotenv(dotenv_path=env_path)
 
-# Point Flask to the frontend dist directory
-frontend_dist_path = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist')
-app = Flask(__name__, static_folder=frontend_dist_path, static_url_path='/')
+app = Flask(__name__)
 CORS(app)
 
 # MongoDB Configuration
@@ -289,15 +289,7 @@ def get_dashboard_metrics():
         "taskDistribution": taskDistribution
     })
 
-# Catch-all route to serve the React SPA
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve_frontend(path):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    else:
-        # Fallback to index.html for client-side routing
-        return send_from_directory(app.static_folder, 'index.html')
+
 
 if __name__ == '__main__':
     port = int(os.getenv("FLASK_PORT", 5000))

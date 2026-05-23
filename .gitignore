@@ -39,5 +39,8 @@ dist-ssr
 # Python/Flask
 __pycache__/
 venv/
+.venv/
 *.pyc
 
+# Vercel
+.vercel/
