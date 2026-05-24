@@ -73,12 +73,7 @@ function UsersPage() {
               <p className="text-xs text-muted-foreground mt-0.5">{u.role}</p>
               <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1.5"><Mail className="h-3 w-3" />{u.email}</p>
             </div>
-            <div className="mt-4 text-center">
-              <div className="rounded-lg bg-muted/50 p-2">
-                <p className="text-lg font-semibold">{allTasks.filter((t: any) => t.assignee?.id === u.id).length}</p>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Tasks</p>
-              </div>
-            </div>
+
             <div className="mt-3 flex gap-2">
               <Button variant="outline" size="sm" className="w-full" onClick={() => {
                 setViewUser(u);
@@ -171,12 +166,7 @@ function UsersPage() {
                 </div>
                 <div className="space-y-1.5"><Label>Password</Label><Input type="text" placeholder="No password set" value={editForm.password} onChange={(e) => setEditForm({...editForm, password: e.target.value})} /></div>
               </div>
-              <div className="w-full text-center mt-2">
-                <div className="rounded-lg bg-muted/50 p-3">
-                  <p className="text-2xl font-semibold">{allTasks.filter((t: any) => t.assignee?.id === viewUser.id).length}</p>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider">Total Tasks</p>
-                </div>
-              </div>
+
             </div>
           )}
           <DialogFooter className="flex w-full sm:justify-between items-center">
