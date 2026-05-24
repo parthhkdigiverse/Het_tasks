@@ -2,6 +2,34 @@ import { useQuery } from '@tanstack/react-query';
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:1122/api';
 
+export interface UserData {
+  name?: string;
+  email?: string;
+  role?: string;
+  password?: string;
+  avatar?: string;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password?: string;
+}
+
+export interface TaskData {
+  title?: string;
+  description?: string;
+  status?: string;
+  priority?: string;
+  assigneeId?: string | null;
+  assignedById?: string | null;
+  dueDate?: string;
+  recurrence?: string;
+  recurrenceDays?: string[];
+  carryOver?: boolean;
+  reminder?: boolean;
+  tags?: string[];
+}
+
 export const fetchUsers = async () => {
   const res = await fetch(`${API_BASE}/users`);
   if (!res.ok) throw new Error('Failed to fetch users');
@@ -33,7 +61,7 @@ export const deleteUser = async (userId: string) => {
   return res.json();
 };
 
-export const createUser = async (data: any) => {
+export const createUser = async (data: UserData) => {
   const res = await fetch(`${API_BASE}/users`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -43,7 +71,7 @@ export const createUser = async (data: any) => {
   return res.json();
 };
 
-export const updateUser = async (userId: string, data: any) => {
+export const updateUser = async (userId: string, data: Partial<UserData>) => {
   const res = await fetch(`${API_BASE}/users/${userId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -53,7 +81,7 @@ export const updateUser = async (userId: string, data: any) => {
   return res.json();
 };
 
-export const loginUser = async (credentials: any) => {
+export const loginUser = async (credentials: LoginCredentials) => {
   const res = await fetch(`${API_BASE}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -66,7 +94,7 @@ export const loginUser = async (credentials: any) => {
   return res.json();
 };
 
-export const createTask = async (data: any) => {
+export const createTask = async (data: TaskData) => {
   const res = await fetch(`${API_BASE}/tasks`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -82,7 +110,7 @@ export const deleteTask = async (taskId: string) => {
   return res.json();
 };
 
-export const updateTask = async (taskId: string, data: any) => {
+export const updateTask = async (taskId: string, data: Partial<TaskData>) => {
   const res = await fetch(`${API_BASE}/tasks/${taskId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
