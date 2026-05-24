@@ -173,6 +173,10 @@ def update_task(task_id):
     if 'description' in data: update_fields['description'] = data['description']
     if 'status' in data: update_fields['status'] = data['status']
     if 'priority' in data: update_fields['priority'] = data['priority']
+    if 'dueDate' in data: update_fields['dueDate'] = data['dueDate']
+    if 'recurrence' in data: update_fields['recurrence'] = data['recurrence']
+    if 'recurrenceDays' in data: update_fields['recurrenceDays'] = data['recurrenceDays']
+    if 'carryOver' in data: update_fields['carryOver'] = data['carryOver']
     
     if 'assigneeId' in data:
         if data['assigneeId']:
