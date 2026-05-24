@@ -22,7 +22,7 @@ function Dashboard() {
   const { data: tasks = [], isLoading: tasksLoading } = useTasks(me?.id);
   const { data: activities = [], isLoading: activitiesLoading } = useActivities();
   const { data: users = [], isLoading: usersLoading } = useUsers();
-  const { data: metrics, isLoading: metricsLoading } = useDashboardMetrics();
+  const { data: metrics, isLoading: metricsLoading } = useDashboardMetrics(me?.id);
 
   const isLoading = tasksLoading || activitiesLoading || usersLoading || metricsLoading;
 

@@ -49,8 +49,9 @@ export const fetchActivities = async () => {
   return res.json();
 };
 
-export const fetchDashboardMetrics = async () => {
-  const res = await fetch(`${API_BASE}/dashboard_metrics`);
+export const fetchDashboardMetrics = async (userId?: string) => {
+  const url = userId ? `${API_BASE}/dashboard_metrics?userId=${userId}` : `${API_BASE}/dashboard_metrics`;
+  const res = await fetch(url);
   if (!res.ok) throw new Error('Failed to fetch dashboard metrics');
   return res.json();
 };
@@ -141,9 +142,9 @@ export const useActivities = () => {
   });
 };
 
-export const useDashboardMetrics = () => {
+export const useDashboardMetrics = (userId?: string) => {
   return useQuery({
-    queryKey: ['dashboard_metrics'],
-    queryFn: fetchDashboardMetrics,
+    queryKey: ['dashboard_metrics', userId],
+    queryFn: () => fetchDashboardMetrics(userId),
   });
 };

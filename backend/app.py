@@ -198,7 +198,13 @@ def get_activities():
 def get_dashboard_metrics():
     import datetime
     now = datetime.datetime.now()
-    tasks = list(db.tasks.find({}))
+    user_id = request.args.get('userId')
+    
+    query = {}
+    if user_id:
+        query['$or'] = [{'assignee.id': user_id}, {'assignedBy.id': user_id}]
+        
+    tasks = list(db.tasks.find(query))
     total_users = db.users.count_documents({})
     
     today_tasks_count = 0
