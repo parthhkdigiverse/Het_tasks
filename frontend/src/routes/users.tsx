@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { initials } from "@/lib/mock-data";
-import { useUsers, deleteUser, updateUser, createUser } from "@/lib/api";
+import { useUsers, deleteUser, updateUser, createUser, useTasks } from "@/lib/api";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,7 @@ export const Route = createFileRoute("/users")({ component: UsersPage });
 function UsersPage() {
   const queryClient = useQueryClient();
   const { data: users = [], isLoading } = useUsers();
+  const { data: allTasks = [] } = useTasks();
   const [q, setQ] = useState("");
   const [role, setRole] = useState("all");
   const [open, setOpen] = useState(false);
@@ -72,14 +73,10 @@ function UsersPage() {
               <p className="text-xs text-muted-foreground mt-0.5">{u.role}</p>
               <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1.5"><Mail className="h-3 w-3" />{u.email}</p>
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-2 text-center">
+            <div className="mt-4 text-center">
               <div className="rounded-lg bg-muted/50 p-2">
-                <p className="text-lg font-semibold">{u.activeTasks}</p>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Active</p>
-              </div>
-              <div className="rounded-lg bg-muted/50 p-2">
-                <p className="text-lg font-semibold">{u.completedTasks}</p>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Done</p>
+                <p className="text-lg font-semibold">{allTasks.filter((t: any) => t.assignee?.id === u.id).length}</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Tasks</p>
               </div>
             </div>
             <div className="mt-3 flex gap-2">
@@ -174,14 +171,10 @@ function UsersPage() {
                 </div>
                 <div className="space-y-1.5"><Label>Password</Label><Input type="text" placeholder="No password set" value={editForm.password} onChange={(e) => setEditForm({...editForm, password: e.target.value})} /></div>
               </div>
-              <div className="w-full grid grid-cols-2 gap-4 text-center mt-2">
+              <div className="w-full text-center mt-2">
                 <div className="rounded-lg bg-muted/50 p-3">
-                  <p className="text-2xl font-semibold">{viewUser.activeTasks}</p>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider">Active Tasks</p>
-                </div>
-                <div className="rounded-lg bg-muted/50 p-3">
-                  <p className="text-2xl font-semibold">{viewUser.completedTasks}</p>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider">Completed</p>
+                  <p className="text-2xl font-semibold">{allTasks.filter((t: any) => t.assignee?.id === viewUser.id).length}</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider">Total Tasks</p>
                 </div>
               </div>
             </div>

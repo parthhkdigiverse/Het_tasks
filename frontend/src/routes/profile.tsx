@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { updateUser } from "@/lib/api";
+import { updateUser, useTasks } from "@/lib/api";
 
 export const Route = createFileRoute("/profile")({ component: ProfilePage });
 
@@ -17,6 +17,7 @@ function ProfilePage() {
   const [name, setName] = useState(me?.name || "");
   const [email, setEmail] = useState(me?.email || "");
   const [isSaving, setIsSaving] = useState(false);
+  const { data: allTasks = [] } = useTasks();
 
   if (!me) return <div className="p-8 text-center text-muted-foreground">Loading profile...</div>;
   return (
@@ -35,8 +36,7 @@ function ProfilePage() {
             <h2 className="text-xl font-semibold">{me.name}</h2>
             <p className="text-sm text-muted-foreground">{me.role} · {me.email}</p>
             <div className="mt-2 flex flex-wrap gap-4 text-xs text-muted-foreground">
-              <span><b className="text-foreground">{me.activeTasks}</b> active</span>
-              <span><b className="text-foreground">{me.completedTasks}</b> completed</span>
+              <span><b className="text-foreground">{allTasks.filter((t: any) => t.assignee?.id === me.id).length}</b> total tasks</span>
               <span><b className="text-foreground">98%</b> on-time</span>
             </div>
           </div>
